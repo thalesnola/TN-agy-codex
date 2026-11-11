@@ -159,19 +159,20 @@ def gerar_diagrama_hierarquia_motion(out_dir):
     s += f'<line x1="500" y1="{y}" x2="500" y2="{y + 65}" stroke="{NAVY}" stroke-width="6" stroke-dasharray="3 12" stroke-linecap="round" marker-end="url(#ar)"/>'
     y += 75
 
-    # Hub Central (r=118, texto 22px com folga interna confortável)
-    cy = y + 118
-    s += f'<circle cx="500" cy="{cy}" r="118" fill="{NAVY}" stroke="#fff" stroke-width="8" filter="url(#sh)"/>'
-    s += tx(500, cy - 12, ["PONTE AGY → OPERÁRIAS"], 22, "#fff", 900, "middle")
-    s += tx(500, cy + 20, ["MCP stdio · CLI JSON · Preflight"], 16, "#fff", 600, "middle")
-    y = cy + 118 + 24
+    # Hub Central (r=124, texto em duas linhas com ampla folga interna)
+    cy = y + 124
+    s += f'<circle cx="500" cy="{cy}" r="124" fill="{NAVY}" stroke="#fff" stroke-width="8" filter="url(#sh)"/>'
+    s += tx(500, cy - 26, ["PONTE", "AGY → OPERÁRIAS"], 22, "#fff", 900, "middle", 28)
+    s += tx(500, cy + 42, ["MCP stdio · CLI JSON · Preflight"], 15, "#fff", 600, "middle")
+    y = cy + 124 + 18
 
-    # Bifurcação: Duas setas pontilhadas partindo do hub para as duas colunas
-    # Esquerda (Azul): aponta para x=270, y=y+65
-    s += f'<line x1="420" y1="{y - 10}" x2="270" y2="{y + 65}" stroke="{AZUL}" stroke-width="6" stroke-dasharray="3 12" stroke-linecap="round" marker-end="url(#ar_blue)"/>'
-    # Direita (Menta): aponta para x=730, y=y+65
-    s += f'<line x1="580" y1="{y - 10}" x2="730" y2="{y + 65}" stroke="{MENTA}" stroke-width="6" stroke-dasharray="3 12" stroke-linecap="round" marker-end="url(#ar_mint)"/>'
-    y += 85
+    # Bifurcação ortogonal limpa do hub para as duas colunas (Nível 2A e Nível 2B)
+    y_mid = y + 26
+    s += f'<line x1="500" y1="{y}" x2="500" y2="{y_mid}" stroke="{NAVY}" stroke-width="5" stroke-linecap="round"/>'
+    s += f'<line x1="270" y1="{y_mid}" x2="730" y2="{y_mid}" stroke="{NAVY}" stroke-width="5" stroke-linecap="round"/>'
+    s += f'<line x1="270" y1="{y_mid}" x2="270" y2="{y + 72}" stroke="{AZUL}" stroke-width="6" stroke-dasharray="3 11" stroke-linecap="round" marker-end="url(#ar_blue)"/>'
+    s += f'<line x1="730" y1="{y_mid}" x2="730" y2="{y + 72}" stroke="{MENTA}" stroke-width="6" stroke-dasharray="3 11" stroke-linecap="round" marker-end="url(#ar_mint)"/>'
+    y += 90
 
     # Nível 2: 2 Colunas Simétricas
     col_w = 440
@@ -238,12 +239,12 @@ def gerar_diagrama_arquitetura_ponte(out_dir):
     s = cabs
 
     # Bloco 1: AGY Core MCP Client
-    s += f'<g filter="url(#sh)"><rect x="50" y="{y}" width="900" height="120" rx="20" fill="#fff" stroke="{VIOLETA}" stroke-width="3"/>'
-    s += tx(80, y + 42, ["CLIENTE: GOOGLE ANTIGRAVITY (AGY)"], 24, VIOLETA, 800)
-    s += tx(80, y + 78, ["• Cérebro Orquestrador (Gemini 4 Argon / Claude Opus) & Agentes Rápidos (Gemini 3.8 Flash / Claude Sonnet)"], 18, TEXTO, 400)
-    s += tx(80, y + 102, ["• Comunica via stdio JSON-RPC 2.0 com o servidor MCP nativo agy-codex-mcp"], 17, CINZ, 400)
+    s += f'<g filter="url(#sh)"><rect x="50" y="{y}" width="900" height="122" rx="20" fill="#fff" stroke="{VIOLETA}" stroke-width="3"/>'
+    s += tx(78, y + 42, ["CLIENTE: GOOGLE ANTIGRAVITY (AGY)"], 23, VIOLETA, 800)
+    s += tx(78, y + 76, ["• Cérebro (Gemini 4 Argon / Claude Opus) & Agentes Rápidos (Gemini 3.8 Flash / Claude Sonnet)"], 16.5, TEXTO, 500)
+    s += tx(78, y + 102, ["• Comunica via stdio JSON-RPC 2.0 com o servidor MCP nativo agy-codex-mcp ou CLI JSON"], 16, CINZ, 400)
     s += '</g>'
-    y += 140
+    y += 142
 
     # Seta para baixo
     s += f'<line x1="500" y1="{y - 20}" x2="500" y2="{y + 20}" stroke="{NAVY}" stroke-width="5" marker-end="url(#ar)"/>'
@@ -256,20 +257,20 @@ def gerar_diagrama_arquitetura_ponte(out_dir):
 
     # 4 Módulos internos
     mods = [
-        ("mcp_server.py", "JSON-RPC 2.0, 7 tools"),
-        ("router.py", "Hierarquização determinística"),
-        ("discovery.py", "Auto-detecção WindowsApps/npm"),
-        ("preflight.py", "Workspace & Fila serial Ollama")
+        ("mcp_server.py", "JSON-RPC 2.0 · 7 tools"),
+        ("router.py", "Hierarquia determinística"),
+        ("discovery.py", "Auto-busca WindowsApps/npm"),
+        ("preflight.py", "Workspace & lock serial")
     ]
     for i, (mod_t, mod_d) in enumerate(mods):
         bx = 75 + i * 215
         s += f'<rect x="{bx}" y="{y + 60}" width="200" height="75" rx="12" fill="#F8FAFC" stroke="{CINZ}" stroke-width="1.5"/>'
-        s += tx(bx + 10, y + 88, [mod_t], 17, NAVY, 800)
-        s += tx(bx + 10, y + 115, [mod_d], 14, CINZ, 500)
+        s += tx(bx + 12, y + 88, [mod_t], 16.5, NAVY, 800)
+        s += tx(bx + 12, y + 115, [mod_d], 12.8, CINZ, 500)
 
     # Contratos
     s += tx(75, y + 165, ["Contratos JSON Schemas: task.schema.json  ·  result.schema.json  ·  review.schema.json"], 17, NAVY, 700)
-    s += tx(75, y + 195, ["Locks & Proteções: ~/.agy-codex/ollama-serial.lock  ·  Rejeição de reparse points  ·  Proibição num_gpu=0"], 16, CINZ, 400)
+    s += tx(75, y + 195, ["Locks & Proteções: ~/.agy-codex/ollama-serial.lock  ·  Rejeição de reparse points  ·  Proibição num_gpu=0"], 15.5, CINZ, 400)
     s += '</g>'
     y += 250
 
@@ -282,29 +283,30 @@ def gerar_diagrama_arquitetura_ponte(out_dir):
     col_w = 435
     x_esq = 50
     x_dir = 515
+    box_h = 318
 
     # Coluna Esquerda: Codex CLI Runner
-    s += f'<g filter="url(#sh)"><rect x="{x_esq}" y="{y}" width="{col_w}" height="240" rx="18" fill="#fff" stroke="{AZUL}" stroke-width="2.5"/>'
-    s += f'<rect x="{x_esq}" y="{y}" width="{col_w}" height="36" rx="18" fill="{AZUL}"/>'
-    s += tx(x_esq + 20, y + 25, ["CODEX CLI EXEC RUNNER"], 17, "#fff", 800)
-    s += tx(x_esq + 20, y + 65, ["Binário:", "WindowsApps codex.exe (v0.167.0)"], 16, NAVY, 700)
-    s += tx(x_esq + 20, y + 115, ["Modelos:", "gpt-6.1-sol (default), gpt-6-luna"], 16, NAVY, 700)
-    s += tx(x_esq + 20, y + 165, ["Flags:", "exec -m <model> -s <sandbox> --skip-git-repo-check"], 15, TEXTO, 400)
-    s += tx(x_esq + 20, y + 195, ["Workspace:", "Staging efêmero (agy-codex-ws/) com git diff limpo"], 15, TEXTO, 400)
-    s += tx(x_esq + 20, y + 225, ["Retorno:", "JSON Schema conciso (unreviewed: false)"], 15, VIOLETA, 700)
+    s += f'<g filter="url(#sh)"><rect x="{x_esq}" y="{y}" width="{col_w}" height="{box_h}" rx="18" fill="#fff" stroke="{AZUL}" stroke-width="2.5"/>'
+    s += f'<rect x="{x_esq}" y="{y}" width="{col_w}" height="38" rx="18" fill="{AZUL}"/>'
+    s += tx(x_esq + 20, y + 26, ["CODEX CLI EXEC RUNNER"], 17, "#fff", 800)
+    s += tx(x_esq + 20, y + 66, ["Binário:", "codex.exe / codex CLI (auto-descoberto)"], 15.5, NAVY, 700, dy=20)
+    s += tx(x_esq + 20, y + 116, ["Modelos & Perfis:", "2ª família OpenAI/GPT (sol / luna / default)"], 15.5, NAVY, 700, dy=20)
+    s += tx(x_esq + 20, y + 166, ["Flags de Isolamento:", "exec -m <model> -s <sandbox> --ephemeral"], 15, TEXTO, 500, dy=20)
+    s += tx(x_esq + 20, y + 216, ["Workspace:", "Staging efêmero (agy-codex-ws/) + git diff limpo"], 15, TEXTO, 500, dy=20)
+    s += tx(x_esq + 20, y + 268, ["Retorno:", "JSON validado por Schema + patch auditável"], 15, VIOLETA, 700, dy=20)
     s += '</g>'
 
     # Coluna Direita: Local Ollama Runners
-    s += f'<g filter="url(#sh)"><rect x="{x_dir}" y="{y}" width="{col_w}" height="240" rx="18" fill="#fff" stroke="{MENTA}" stroke-width="2.5"/>'
-    s += f'<rect x="{x_dir}" y="{y}" width="{col_w}" height="36" rx="18" fill="{MENTA}"/>'
-    s += tx(x_dir + 20, y + 25, ["OLLAMA SERIAL LOCAL RUNNERS"], 17, "#fff", 800)
-    s += tx(x_dir + 20, y + 65, ["dsh-local:", "gpt-oss:20b (~70 s) · 1 a 4 arquivos"], 16, NAVY, 700)
-    s += tx(x_dir + 20, y + 105, ["qwen-local:", "Qwen3-Coder-Next 36 GB · lote mecânico ≥ 5 arqs"], 16, NAVY, 700)
-    s += tx(x_dir + 20, y + 145, ["opencode-local:", "Nemotron 30B · investigação acervo / RAG"], 16, NAVY, 700)
-    s += tx(x_dir + 20, y + 185, ["ollama-direct:", "qwen3-coder:30b · refatoração e quick review"], 16, NAVY, 700)
-    s += tx(x_dir + 20, y + 225, ["Governança:", "Lock serial atômico + unreviewed_local_output: true"], 15, CORAL, 700)
+    s += f'<g filter="url(#sh)"><rect x="{x_dir}" y="{y}" width="{col_w}" height="{box_h}" rx="18" fill="#fff" stroke="{MENTA}" stroke-width="2.5"/>'
+    s += f'<rect x="{x_dir}" y="{y}" width="{col_w}" height="38" rx="18" fill="{MENTA}"/>'
+    s += tx(x_dir + 20, y + 26, ["OLLAMA SERIAL LOCAL RUNNERS"], 17, "#fff", 800)
+    s += tx(x_dir + 20, y + 66, ["dsh-local:", "gpt-oss:20b (~70 s) · código e revisão 1–4 arqs"], 15.5, NAVY, 700, dy=20)
+    s += tx(x_dir + 20, y + 116, ["qwen-local:", "Qwen3-Coder-Next 36 GB · lote mecânico ≥ 5 arqs"], 15.5, NAVY, 700, dy=20)
+    s += tx(x_dir + 20, y + 166, ["opencode-local:", "Nemotron 30B · consulta estruturada / RAG"], 15.5, NAVY, 700, dy=20)
+    s += tx(x_dir + 20, y + 216, ["ollama-direct:", "qwen3-coder:30b / 7b · refatoração rápida"], 15.5, NAVY, 700, dy=20)
+    s += tx(x_dir + 20, y + 268, ["Governança:", "Lock serial atômico + unreviewed_local_output"], 15, CORAL, 700, dy=20)
     s += '</g>'
-    y += 265
+    y += box_h + 24
 
     # Faixa Final
     s_faixa, y = faixa(y, "Contrato estrito: dados fluem em JSONL/stdio; o AGY mantém a soberania analítica sobre qualquer diff.")
@@ -314,24 +316,21 @@ def gerar_diagrama_arquitetura_ponte(out_dir):
 
 
 if __name__ == "__main__":
-    base_brain = Path(r"<USER_HOME>\.gemini\antigravity\brain\91722515-812c-4032-bfb8-e030c5c881f8")
-    base_brain.mkdir(parents=True, exist_ok=True)
-
-    dest_priv = Path(r"C:\Github\agy-codex\docs")
-    dest_pub = Path(r"C:\Github\TN-PUBLIC-CANDIDATES\TN-agy-codex\docs")
-    dest_priv.mkdir(parents=True, exist_ok=True)
-    dest_pub.mkdir(parents=True, exist_ok=True)
+    repo_root = Path(__file__).resolve().parent.parent
+    dest_docs = Path(sys.argv[1]) if len(sys.argv) > 1 else (repo_root / "docs")
+    dest_docs.mkdir(parents=True, exist_ok=True)
 
     print("1/2 Gerando Diagrama Motion da Hierarquização...")
-    s1, p1 = gerar_diagrama_hierarquia_motion(dest_priv)
-    shutil.copy(s1, dest_pub / "hierarquia-motion.svg")
-    shutil.copy(p1, dest_pub / "hierarquia-motion.png")
-    shutil.copy(p1, base_brain / "motion-agy-codex-hierarquia.png")
+    s1, p1 = gerar_diagrama_hierarquia_motion(dest_docs)
 
     print("2/2 Gerando Diagrama Técnico da Ponte (Okabe-Ito)...")
-    s2, p2 = gerar_diagrama_arquitetura_ponte(dest_priv)
-    shutil.copy(s2, dest_pub / "arquitetura-ponte.svg")
-    shutil.copy(p2, dest_pub / "arquitetura-ponte.png")
-    shutil.copy(p2, base_brain / "arquitetura-ponte-agy-codex.png")
+    s2, p2 = gerar_diagrama_arquitetura_ponte(dest_docs)
 
-    print("Diagramas gerados com sucesso e copiados para docs/ e para o brain do Cérebro!")
+    extra_dir = os.environ.get("AGY_BRAIN_OUT", "")
+    if extra_dir:
+        eb = Path(extra_dir)
+        eb.mkdir(parents=True, exist_ok=True)
+        shutil.copy(p1, eb / "motion-agy-codex-hierarquia.png")
+        shutil.copy(p2, eb / "arquitetura-ponte-agy-codex.png")
+
+    print("Diagramas gerados com sucesso em:", dest_docs)
