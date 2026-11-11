@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgyCodexTask",
+  "type": "object",
+  "required": ["id", "operation", "prompt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "operation": {
+      "type": "string",
+      "enum": ["ask", "review", "challenge", "delegate", "local", "status", "route"]
+    },
+    "worker": {
+      "type": "string",
+      "enum": ["auto", "codex", "dsh-local", "qwen-local", "opencode-local", "ollama-direct"]
+    },
+    "model": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "workspace": {
+      "type": "string"
+    },
+    "files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sandbox": {
+      "type": "string",
+      "enum": ["read-only", "workspace-write", "danger-full-access"]
+    },
+    "timeout_sec": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}

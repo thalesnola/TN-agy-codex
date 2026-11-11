@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agy-codex"
+version = "1.0.0"
+description = "Ponte AGY -> Codex & Modelos Locais: servidor MCP stdio, CLI Python e fila serial Ollama comandados pelo Antigravity."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "TN" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+agy-codex = "agy_codex.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
