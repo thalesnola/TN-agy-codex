@@ -1,3 +1,5 @@
+![Demonstração Motion — TN-agy-codex](docs/diagrama-motion.svg)
+
 # agy-codex
 
 > **Ponte AGY -> Codex & Modelos Locais:** servidor MCP stdio, CLI Python e fila serial Ollama comandados pelo Google Antigravity.
